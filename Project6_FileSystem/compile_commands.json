@@ -1,0 +1,22 @@
+[
+    {
+        "arguments": [
+            "riscv64-unknown-linux-gnu-gcc",
+            "-c",
+            "-O0",
+            "-fno-builtin",
+            "-nostdlib",
+            "-nostdinc",
+            "-Wall",
+            "-mcmodel=medany",
+            "-ggdb3",
+            "-I./tiny_libc/include",
+            "./build/crt0.o",
+            "-o",
+            "build/bigfile",
+            "test/test_project6/bigfile.c"
+        ],
+        "directory": "/home/stu/shiwenxuan20/Project6_File_System",
+        "file": "test/test_project6/bigfile.c"
+    }
+]

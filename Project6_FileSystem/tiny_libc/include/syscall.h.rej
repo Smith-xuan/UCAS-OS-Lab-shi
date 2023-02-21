@@ -1,0 +1,23 @@
+--- tiny_libc/include/syscall.h	2022-12-04 00:00:43.806914696 +0800
++++ tiny_libc/include/syscall.h	2022-12-04 00:00:43.810914739 +0800
+@@ -36,5 +36,20 @@
+ #define SYSCALL_SHM_DT 57
+ #define SYSCALL_NET_SEND 63
+ #define SYSCALL_NET_RECV 64
++#define SYSCALL_FS_MKFS 65
++#define SYSCALL_FS_STATFS 66
++#define SYSCALL_FS_CD 67
++#define SYSCALL_FS_MKDIR 68
++#define SYSCALL_FS_RMDIR 69
++#define SYSCALL_FS_LS 70
++#define SYSCALL_FS_TOUCH 71
++#define SYSCALL_FS_CAT 72
++#define SYSCALL_FS_FOPEN 73
++#define SYSCALL_FS_FREAD 74 
++#define SYSCALL_FS_FWRITE 75 
++#define SYSCALL_FS_FCLOSE 76
++#define SYSCALL_FS_LN 77
++#define SYSCALL_FS_RM 78
++#define SYSCALL_FS_LSEEK 79
+ 
+ #endif
