@@ -1,0 +1,52 @@
+
+build/bootblock:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000050200000 <_ftext>:
+    50200000:	0ff0000f          	fence
+    50200004:	e529                	bnez	a0,5020004e <secondary>
+    50200006:	4525                	li	a0,9
+    50200008:	00000597          	auipc	a1,0x0
+    5020000c:	06c58593          	addi	a1,a1,108 # 50200074 <__DATA_BEGIN__>
+    50200010:	fff50097          	auipc	ra,0xfff50
+    50200014:	ff0080e7          	jalr	-16(ra) # 50150000 <bios_func_entry>
+    50200018:	50200437          	lui	s0,0x50200
+    5020001c:	1fc4041b          	addiw	s0,s0,508
+    50200020:	00041403          	lh	s0,0(s0) # 50200000 <_ftext>
+    50200024:	4485                	li	s1,1
+    50200026:	20000913          	li	s2,512
+    5020002a:	502019b7          	lui	s3,0x50201
+
+000000005020002e <do_read_sector>:
+    5020002e:	452d                	li	a0,11
+    50200030:	85ce                	mv	a1,s3
+    50200032:	4605                	li	a2,1
+    50200034:	86a6                	mv	a3,s1
+    50200036:	fff50097          	auipc	ra,0xfff50
+    5020003a:	fca080e7          	jalr	-54(ra) # 50150000 <bios_func_entry>
+    5020003e:	0485                	addi	s1,s1,1
+    50200040:	99ca                	add	s3,s3,s2
+    50200042:	147d                	addi	s0,s0,-1
+    50200044:	fe8045e3          	bgtz	s0,5020002e <do_read_sector>
+    50200048:	502010b7          	lui	ra,0x50201
+    5020004c:	8082                	ret
+
+000000005020004e <secondary>:
+    5020004e:	0ff0000f          	fence
+    50200052:	10401073          	csrw	sie,zero
+    50200056:	502012b7          	lui	t0,0x50201
+    5020005a:	10529073          	csrw	stvec,t0
+    5020005e:	4289                	li	t0,2
+    50200060:	1042a073          	csrs	sie,t0
+    50200064:	4289                	li	t0,2
+    50200066:	10029073          	csrw	sstatus,t0
+
+000000005020006a <wait_for_wakeup>:
+    5020006a:	10500073          	wfi
+    5020006e:	bff5                	j	5020006a <wait_for_wakeup>
+
+0000000050200070 <stop>:
+    50200070:	a001                	j	50200070 <stop>
+    50200072:	0001                	nop
