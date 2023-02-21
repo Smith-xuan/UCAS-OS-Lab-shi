@@ -1,0 +1,10 @@
+--- tiny_libc/include/syscall.h	2022-11-07 13:24:40.393103453 +0800
++++ tiny_libc/include/syscall.h	2022-11-07 13:24:40.405103742 +0800
+@@ -32,5 +32,7 @@
+ #define SYSCALL_MBOX_CLOSE 53
+ #define SYSCALL_MBOX_SEND 54
+ #define SYSCALL_MBOX_RECV 55
++#define SYSCALL_SHM_GET 56
++#define SYSCALL_SHM_DT 57
+ 
+ #endif
