@@ -1,0 +1,27 @@
+P1添加代码：
+1.bootblock.S中添加的汇编代码用于打印"It's a bootloader...\n\r"
+  然后调用bios_sdread函数把kernel部分代码从image文件中载入内存，值得注意的是，加载的大小也是createimage时提前在image文件中放好的，需要bootblock.S取出作为bios_sdread的参数之一。
+
+2.head.S属于kernel的最开头部分，其中添加的汇编代码用于清空bss段，设置栈帧，为kernel提供c语言运行环境，然后跳到main.c执行。
+
+3.crt0.S添加的代码为用户程序提供c语言环境，清空bss段设置栈帧，然后跳到用户程序的main函数中，执行完用户程序后跳回到Kernel。
+
+4.在main.c中添加的代码一部分是定义init_task_info()函数，通过指针获取提前写入bootblock的task_Info地址，然后用bios_sdread函数将task_info加载到内存，再copy到main.c中定义的taskinfo里来。
+  另一部分是对键入的task_name进行打印和收集判断到底要执行哪一个用户程序，然后调用load_task_img函数加载用户程序到内存，并得到用户程序的入口地址。最后用内联汇编之间跳转到入口地址即可。
+
+5.在loader.c中添加的代码是对load_task_img函数的定义，通过taskinfo给出的信息，将用户程序加载到内存中，然后返回入口地址。
+
+6.在createimage.c中添加的代码，首先是定义了task_Info然后在createimage函数中通过程序头提供的各种信息，把几个用户程序的大小，偏移，入口地址等信息都放到task_info里面，然后对bootblock做了padding。
+
+另一部分是定义了write_img_info()函数，这个函数把kernel的大小，taskinfo的位置都写到image文件中的bootblock部分，一边在bootblock.S中可以直接读取。同时该函数还把task_info写到用户程序的后面，以便其他程序读取。
+
+
+实验过程：
+
+本次实验对我来说是一次不小的挑战，task1尚且还好，到task2时就要大体理解整个代码框架的内容和意义，一开始在image镜像文件的作用上纠结了不少时间，最后终于弄懂了image文件，sd卡，内存这些概念之间的相互联系。
+
+task3时遇到了不小的困难，一个是在main.c中想不到好办法跳转到用户程序的入口地址，后来经过同学提醒想到有内联汇编这个方法。另一个是在写crt0.S的时候不知道怎么跳回内核，在这里卡了不少时间，最后跟同学讨论时知道可以设置一个栈指针存储返回地址，并且对crt0.S与用户程序的连接方式有了新的了解，归根到底还是汇编和编译这块的知识掌握不是很熟练。
+
+task4时在写init_task_info函数的时候也遇到了障碍，一开始不知道怎么得到task_info的地址，想到用指针直接指过去后又苦于怎么把task_info的东西拿出来，一开始想的是直接把main.c中定义的taskinfo指针指过去，但是这样很不安全，如果task_info所在的内存在执行过程中更改，main.c的task_info就一起没了，最后采用了直接copy的方法。
+
+总的来说受益良多！
